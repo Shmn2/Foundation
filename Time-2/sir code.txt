@@ -1,0 +1,140 @@
+Python 3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]
+Type "copyright", "credits" or "license" for more information.
+
+IPython 8.27.0 -- An enhanced Interactive Python.
+
+Restarting kernel...
+ 
+
+
+
+runfile('C:/Users/Asus/Downloads/Useful/books/Course materials/MScCS/Foundation/Make_Money_with_Tensorflow_2.0-master/Make_Money_with_Tensorflow_2.0-master/projects/main.py', wdir='C:/Users/Asus/Downloads/Useful/books/Course materials/MScCS/Foundation/Make_Money_with_Tensorflow_2.0-master/Make_Money_with_Tensorflow_2.0-master/projects')
+C:\Users\Asus\anaconda3\Lib\site-packages\backtesting\_plotting.py:55: UserWarning: Jupyter Notebook detected. Setting Bokeh output to notebook. This may not work in Jupyter clients without JavaScript support, such as old IDEs. Reset with `backtesting.set_bokeh_output(notebook=False)`.
+  warnings.warn('Jupyter Notebook detected. '
+
+
+
+Running pipeline from step 1 to 9
+
+=== Step 1: LOAD ===
+Loading dataset...
+                           time     open  ...  Signal                Date
+Date                                      ...                            
+2014-12-31 18:00:00  1420048800  1.20997  ...       0 2014-12-31 18:00:00
+2015-01-02 08:00:00  1420185600  1.20481  ...       0 2015-01-02 08:00:00
+2015-01-02 09:00:00  1420189200  1.20537  ...       0 2015-01-02 09:00:00
+2015-01-02 10:00:00  1420192800  1.20556  ...       0 2015-01-02 10:00:00
+2015-01-02 11:00:00  1420196400  1.20468  ...       0 2015-01-02 11:00:00
+
+[5 rows x 8 columns] Signal
+ 0    60668
+ 1      635
+-1      635
+Name: count, dtype: int64
+=== Step 2: LABEL ===
+Generating labels from raw data...
+Shift signals forward by delay 3 bars.
+Filtered Signals After Propagation: Signal
+ 1    31125
+-1    30706
+ 0      107
+Name: count, dtype: int64
+After nullify prior 5 signal: (array([-1,  0,  1]), array([27571,  6377, 27990], dtype=int64))
+Low-volatility threshold (ATR percentile 20%) = 0.001039
+After nullify prior signal: Signal
+-1    22096
+ 1    21972
+ 0    17870
+Name: count, dtype: int64
+Before: Signal
+-1    22096
+ 1    21972
+ 0    17870
+Name: count, dtype: int64
+Filtering BUY/SELL by slope:  (array([-1,  0,  1]), array([13466, 35056, 13416], dtype=int64))
+Dataset with generated Signal saved at C:\Users\Asus\Downloads\Useful\books\Course materials\MScCS\Foundation\Make_Money_with_Tensorflow_2.0-master\Make_Money_with_Tensorflow_2.0-master\projects\datasets\cleaned_generated_signal.csv
+=== Step 3: SIMULATION ===
+Backtest.run:   0%|          | 0/61937 [00:00<?, ?bar/s]
+C:\Users\Asus\Downloads\Useful\books\Course materials\MScCS\Foundation\Make_Money_with_Tensorflow_2.0-master\Make_Money_with_Tensorflow_2.0-master\projects\modules\simulator.py:65: UserWarning: Some trades remain open at the end of backtest. Use `Backtest(..., finalize_trades=True)` to close them and include them in stats.
+  stats = bt.run()
+Start                     2014-12-31 18:00:00
+End                       2024-12-20 14:00:00
+Duration                   3641 days 20:00:00
+Exposure Time [%]                     99.7885
+Equity Final [$]                  58808.94536
+Equity Peak [$]                    59913.0936
+Commissions [$]                   93209.43361
+Return [%]                          488.08945
+Buy & Hold Return [%]               -14.14392
+Return (Ann.) [%]                     18.6021
+Volatility (Ann.) [%]                 9.44192
+CAGR [%]                             13.04265
+Sharpe Ratio                          1.97016
+Sortino Ratio                         3.58403
+Calmar Ratio                          2.09417
+Alpha [%]                           487.69789
+Beta                                 -0.02768
+Max. Drawdown [%]                    -8.88282
+Avg. Drawdown [%]                    -0.41989
+Max. Drawdown Duration      284 days 13:00:00
+Avg. Drawdown Duration        3 days 03:00:00
+# Trades                                  774
+Win Rate [%]                         55.03876
+Best Trade [%]                        4.78348
+Worst Trade [%]                      -3.28334
+Avg. Trade [%]                        0.22993
+Max. Trade Duration          44 days 00:00:00
+Avg. Trade Duration           4 days 17:00:00
+Profit Factor                         2.33456
+Expectancy [%]                        0.23336
+SQN                                   6.93618
+Kelly Criterion                       0.30089
+_strategy                  SignalBandStrategy
+_equity_curve                             ...
+_trades                         Size  Entr...
+dtype: object
+=== Step 4: VISUALIZE ===
+Visualization disabled (use --visualize true)
+=== Step 5: FEATURES ===
+Extracting features...
+=== Step 6: SELECT ===
+Performing feature selection...
+Selected Features: ['open', 'high', 'low', 'close', 'volume', 'return_10', 'sma20', 'sma50', 'ma_alignment', 'slope_20', 'macd_hist', 'adx', 'rsi', 'roc', 'stoch_k', 'stoch_d', 'atr_n', 'bb_width', 'bb_pos', 'obv']
+=== Step 7: TRAIN ===
+Preparing dataset for model training...
+Training raw XGB model with sample weight
+====== 20% Test Classification Report ======
+              precision    recall  f1-score   support
+
+        Hold       0.93      0.54      0.68      7797
+        Sell       0.36      0.75      0.48      2289
+         Buy       0.39      0.52      0.44      2292
+
+    accuracy                           0.57     12378
+   macro avg       0.56      0.60      0.54     12378
+weighted avg       0.72      0.57      0.60     12378
+
+[✓] Report saved → reports\classification_report_20260103_091658_6948ad.txt
+=== Step 8: SAVE ===
+Model saved successfully at C:\Users\Asus\Downloads\Useful\books\Course materials\MScCS\Foundation\Make_Money_with_Tensorflow_2.0-master\Make_Money_with_Tensorflow_2.0-master\projects\models.
+=== Step 9: TEST ===
+Loading external test dataset...C:\Users\Asus\Downloads\Useful\books\Course materials\MScCS\Foundation\Make_Money_with_Tensorflow_2.0-master\Make_Money_with_Tensorflow_2.0-master\projects\datasets\GBPUSD_H1_20140525_20251021.csv
+Extracting features from test dataset...
+Using the selected features ['open', 'high', 'low', 'close', 'volume', 'return_10', 'sma20', 'sma50', 'ma_alignment', 'slope_20', 'macd_hist', 'adx', 'rsi', 'roc', 'stoch_k', 'stoch_d', 'atr_n', 'bb_width', 'bb_pos', 'obv']
+Predicting signals...
+{0: 6280, 1: 3644, 2: 27} 9951 9951
+                        open     high      low  ...    bb_pos      obv  Signal
+time                                            ...                           
+2024-04-01 21:00:00  1.25478  1.25483  1.25412  ...  0.040691 -24850.0       0
+2024-04-01 22:00:00  1.25415  1.25472  1.25414  ...  0.125895 -23186.0       0
+2024-04-01 23:00:00  1.25466  1.25505  1.25453  ...  0.184200 -22207.0       0
+2024-04-02 00:00:00  1.25503  1.25625  1.25456  ...  0.223142 -21174.0       0
+2024-04-02 01:00:00  1.25517  1.25528  1.25470  ...  0.224045 -21886.0       0
+
+[5 rows x 21 columns] Signal
+ 0    6280
+-1    3644
+ 1      27
+Name: count, dtype: int64
+
+￼

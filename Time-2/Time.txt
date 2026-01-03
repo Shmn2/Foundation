@@ -1,0 +1,451 @@
+python main.py --start 1 --end 7 --conf 0.80 --hold_ratio 3 --pred_min_bars 40
+
+>>> Running pipeline from step 1 to 7
+
+
+=== Step 1: LOAD ===
+Loading dataset...
+Loaded rows: 61938
+
+=== Step 2: LABEL ===
+Generating Group-1 EntrySignal + ML Label (EntrySignal)...
+Shift signals forward by delay=2 bars.
+Low-volatility threshold ATR percentile=20% => 0.001039
+After ATR filter: {0: 60976, 1: 489, -1: 473}
+Before slope filter: {0: 60976, 1: 489, -1: 473}
+After slope filter: {0: 61140, 1: 417, -1: 381}
+[Label] Using EntrySignal as ML Label (Group-1 aligned).
+
+Backtesting (EntrySignal)...
+
+===== EntrySignal Backtest =====
+Start               : 2014-12-31 18:00:00
+End                 : 2024-12-20 14:00:00
+# Trades            : 547
+Win Rate [%]        : 71.29798903107861
+Return [%]          : 796.7495480502023
+Max. Drawdown [%]   : -9.810230289467746
+Profit Factor       : 3.404030444617669
+Sharpe Ratio        : 2.584480283274535
+Avg. Trade [%]      : 0.4026325875792436
+Best Trade [%]      : 4.592760681667707
+Worst Trade [%]     : -5.604840732823342
+Saved: D:\Time\datasets\group1_entrysignal_label.csv
+
+=== Step 3: VISUALIZE ===
+Shift signals forward by delay=2 bars.
+Signals After Propagation (PLOT ONLY): {1: 31429, -1: 30490, 0: 19}
+
+=== Step 4: FEATURES ===
+Extracting features...
+Please wait working with extract_buy_sell_hold_features...
+################################################################################
+Please wait working with add_price_window_features...
+################################################################################
+Features shape: (61938, 147)
+
+=== Step 5: SELECT ===
+Performing feature selection...
+D:\Time\env11\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.  
+  warnings.warn(
+D:\Time\env11\Lib\site-packages\sklearn\linear_model\_logistic.py:1160: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+D:\Time\env11\Lib\site-packages\sklearn\linear_model\_logistic.py:1184: FutureWarning: 'n_jobs' has no effect since 1.8 and will be removed in 1.10. You provided 'n_jobs=-1', please leave it unspecified.
+  warnings.warn(msg, category=FutureWarning)
+Selected Features: [np.str_('ma_alignment'), np.str_('macd'), np.str_('macd_signal'), np.str_('hh'), np.str_('ll'), np.str_('pivot_high'), np.str_('pivot_low'), np.str_('dir'), np.str_('open_slope_10'), np.str_('high_std_3'), np.str_('high_slope_3'), np.str_('high_slope_10'), np.str_('high_slope_20'), np.str_('low_slope_3'), np.str_('low_std_5'), np.str_('low_slope_10'), np.str_('low_slope_20'), np.str_('close_slope_3'), np.str_('volume_slope_3')]
+
+=== Step 6: TRAIN ===
+Preparing dataset for model training...
+
+[Downsample] trades=798, holds_kept=2394 (ratio=3x)
+
+Label distribution (mapped, after downsample):
+0    2394
+2     417
+1     381
+Name: count, dtype: int64
+0    0.750000
+2    0.130639
+1    0.119361
+Name: proportion, dtype: float64
+
+=== Classical ML Models (weighted + macro + entry-only metrics) ===
+Class weights used: {np.int64(0): 0.4436913451511992, np.int64(2): 2.5555555555555554, np.int64(1): 2.8178807947019866}
+
+==== RandomForest Classification Report (ALL) ====
+              precision    recall  f1-score   support
+
+           0       0.94      0.95      0.94       476
+           1       0.86      0.80      0.83        79
+           2       0.83      0.83      0.83        84
+
+    accuracy                           0.92       639
+   macro avg       0.88      0.86      0.87       639
+weighted avg       0.91      0.92      0.91       639
+
+Accuracy (all bars): 0.9155
+Macro F1 (all): 0.8686 | Weighted F1 (all): 0.9150
+
+---- Entry-only metrics (BUY/SELL only, HOLD excluded) ----
+Entry-only accuracy: 0.8160
+Entry-only Macro F1: 0.5988
+Entry-only Precision (macro): 0.6667
+Entry-only Recall (macro): 0.5436
+Pred distribution: {0: 482, 1: 73, 2: 84}
+
+==== LogisticRegression Classification Report (ALL) ====
+              precision    recall  f1-score   support
+
+           0       1.00      0.82      0.90       476
+           1       0.66      1.00      0.80        79
+           2       0.66      1.00      0.79        84
+
+    accuracy                           0.87       639
+   macro avg       0.77      0.94      0.83       639
+weighted avg       0.91      0.87      0.88       639
+
+Accuracy (all bars): 0.8685
+Macro F1 (all): 0.8312 | Weighted F1 (all): 0.8757
+
+---- Entry-only metrics (BUY/SELL only, HOLD excluded) ----
+Entry-only accuracy: 1.0000
+Entry-only Macro F1: 1.0000
+Entry-only Precision (macro): 1.0000
+Entry-only Recall (macro): 1.0000
+Pred distribution: {0: 392, 1: 119, 2: 128}
+
+==== SVM Classification Report (ALL) ====
+              precision    recall  f1-score   support
+
+           0       1.00      0.75      0.85       476
+           1       0.56      1.00      0.72        79
+           2       0.58      1.00      0.74        84
+
+    accuracy                           0.81       639
+   macro avg       0.72      0.92      0.77       639
+weighted avg       0.89      0.81      0.82       639
+
+Accuracy (all bars): 0.8106
+Macro F1 (all): 0.7709 | Weighted F1 (all): 0.8225
+
+---- Entry-only metrics (BUY/SELL only, HOLD excluded) ----
+Entry-only accuracy: 1.0000
+Entry-only Macro F1: 1.0000
+Entry-only Precision (macro): 1.0000
+Entry-only Recall (macro): 1.0000
+Pred distribution: {0: 355, 1: 140, 2: 144}
+
+==== XGBoost Classification Report (ALL) ====
+              precision    recall  f1-score   support
+
+           0       0.99      0.92      0.96       476
+           1       0.83      0.96      0.89        79
+           2       0.81      0.99      0.89        84
+
+    accuracy                           0.94       639
+   macro avg       0.87      0.96      0.91       639
+weighted avg       0.95      0.94      0.94       639
+
+Accuracy (all bars): 0.9374
+Macro F1 (all): 0.9110 | Weighted F1 (all): 0.9391
+
+---- Entry-only metrics (BUY/SELL only, HOLD excluded) ----
+Entry-only accuracy: 0.9755
+Entry-only Macro F1: 0.6582
+Entry-only Precision (macro): 0.6667
+Entry-only Recall (macro): 0.6500
+Pred distribution: {0: 444, 1: 92, 2: 103}
+RandomForest {'Accuracy_all': 0.9154929577464789, 'F1_macro': 0.868637756534691, 'F1_weighted': 0.9149545295801473, 'Precision_macro': 0.8780354560210185, 'Recall_macro': 0.8601271732321621, 'Entry_only_accuracy': 0.8159509202453987, 'Entry_only_F1_macro': 0.598804950917627, 'Entry_only_Precision_macro': 0.6666666666666666, 'Entry_only_Recall_macro': 0.5436005625879043}
+LogisticRegression {'Accuracy_all': 0.8685446009389671, 'F1_macro': 0.8312194782066967, 'F1_weighted': 0.8756524658015976, 'Precision_macro': 0.7733718487394957, 'Recall_macro': 0.9411764705882352, 'Entry_only_accuracy': 1.0, 'Entry_only_F1_macro': 1.0, 'Entry_only_Precision_macro': 1.0, 'Entry_only_Recall_macro': 1.0}
+SVM {'Accuracy_all': 0.810641627543036, 'F1_macro': 0.7708985303044632, 'F1_weighted': 0.8225053281493188, 'Precision_macro': 0.7158730158730159, 'Recall_macro': 0.915266106442577, 'Entry_only_accuracy': 1.0, 'Entry_only_F1_macro': 1.0, 'Entry_only_Precision_macro': 1.0, 'Entry_only_Recall_macro': 1.0}
+XGBoost {'Accuracy_all': 0.9374021909233177, 'F1_macro': 0.9110370542595607, 'F1_weighted': 0.939113325458678, 'Precision_macro': 0.8743010634103922, 'Recall_macro': 0.9581634341500314, 'Entry_only_accuracy': 0.9754601226993865, 'Entry_only_F1_macro': 0.6582190457794089, 'Entry_only_Precision_macro': 0.6666666666666666, 'Entry_only_Recall_macro': 0.6500401848503115}  
+
+=== Deep Learning Models ===
+[INFO] TensorFlow models skipped unless you install tensorflow.
+
+Please wait working with extract_buy_sell_hold_features...
+################################################################################
+Please wait working with add_price_window_features...
+################################################################################
+
+Unknown dataset prediction distribution:
+Signal
+ 0    69659
+ 1      778
+-1      678
+Name: count, dtype: int64
+D:\Time\modules\simulator.py:71: UserWarning: Data index is not datetime. Assuming simple periods, but `pd.DateTimeIndex` is advised.
+  bt = Backtest(
+
+===== Predicted Signal Backtest (Unknown Dataset) =====
+Start               : 0.0
+End                 : 71114.0
+# Trades            : 710.0
+Win Rate [%]        : 35.63380281690141
+Return [%]          : -96.83998925520008
+Max. Drawdown [%]   : -96.8594910007518
+Profit Factor       : 0.2674371809969729
+Sharpe Ratio        : nan
+Avg. Trade [%]      : -0.486643985393842
+Best Trade [%]      : 6.60951840352341
+Worst Trade [%]     : -10.088340889596866
+(env11) PS D:\Time>
+
+
+                    python main.py --start 1 --end 7 --conf 0.85 --hold_ratio 2 --pred_min_bars 60 --pred_atr_filter
+
+>>> Running pipeline from step 1 to 7
+
+
+=== Step 1: LOAD ===
+Loading dataset...
+Loaded rows: 61938
+
+=== Step 2: LABEL ===
+Generating Group-1 EntrySignal + ML Label (EntrySignal)...
+Shift signals forward by delay=2 bars.
+Low-volatility threshold ATR percentile=20% => 0.001039
+After ATR filter: {0: 60976, 1: 489, -1: 473}
+Before slope filter: {0: 60976, 1: 489, -1: 473}
+After slope filter: {0: 61140, 1: 417, -1: 381}
+[Label] Using EntrySignal as ML Label (Group-1 aligned).
+
+Backtesting (EntrySignal)...
+
+===== EntrySignal Backtest =====
+Start               : 2014-12-31 18:00:00
+End                 : 2024-12-20 14:00:00
+# Trades            : 547
+Win Rate [%]        : 71.29798903107861
+Return [%]          : 796.7495480502023
+Max. Drawdown [%]   : -9.810230289467746
+Profit Factor       : 3.404030444617669
+Sharpe Ratio        : 2.584480283274535
+Avg. Trade [%]      : 0.4026325875792436
+Best Trade [%]      : 4.592760681667707
+Worst Trade [%]     : -5.604840732823342
+Saved: D:\Time\datasets\group1_entrysignal_label.csv
+
+=== Step 3: VISUALIZE ===
+Shift signals forward by delay=2 bars.
+Traceback (most recent call last):
+  File "D:\Time\main.py", line 613, in <module>
+    pipeline.run_pipeline(start_step, end_step)
+  File "D:\Time\main.py", line 317, in run_pipeline
+    fn()
+  File "D:\Time\main.py", line 363, in visualize_current_dataset
+  File "D:\Time\main.py", line 363, in visualize_current_dataset
+    visualize_dataset(self.raw_data, self.dataset, limit=3000)
+  File "D:\Time\main.py", line 253, in visualize_dataset
+    prop = signal_propagate_for_plot_only(sh)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Time\modules\signal_label_processing.py", line 157, in signal_propagate_for_plot_only
+    out.loc[idx, "Signal"] = current
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\Time\env11\Lib\site-packages\pandas\core\indexing.py", line 912, in __setitem__
+    iloc._setitem_with_indexer(indexer, value, self.name)
+  File "D:\Time\env11\Lib\site-packages\pandas\core\indexing.py", line 1943, in _setitem_with_indexer
+    self._setitem_with_indexer_split_path(indexer, value, name)
+  File "D:\Time\env11\Lib\site-packages\pandas\core\indexing.py", line 2036, in _setitem_with_indexer_split_path
+    self._setitem_single_column(loc, value, pi)
+  File "D:\Time\env11\Lib\site-packages\pandas\core\indexing.py", line 2176, in _setitem_single_column
+    self.obj._mgr.column_setitem(loc, plane_indexer, value)
+  File "D:\Time\env11\Lib\site-packages\pandas\core\internals\managers.py", line 1357, in column_setitem
+    self.iset(loc, new_mgr._block.values, inplace=True)
+  File "D:\Time\env11\Lib\site-packages\pandas\core\internals\managers.py", line 1168, in iset
+    continue
+KeyboardInterrupt
+(env11) PS D:\Time> python main.py --start 1 --end 7 --conf 0.85 --hold_ratio 2 --pred_min_bars 60 --pred_atr_filter
+
+>>> Running pipeline from step 1 to 7
+
+
+=== Step 1: LOAD ===
+Loading dataset...
+Loaded rows: 61938
+
+=== Step 2: LABEL ===
+Generating Group-1 EntrySignal + ML Label (EntrySignal)...
+Shift signals forward by delay=2 bars.
+Low-volatility threshold ATR percentile=20% => 0.001039
+After ATR filter: {0: 60976, 1: 489, -1: 473}
+Before slope filter: {0: 60976, 1: 489, -1: 473}
+After slope filter: {0: 61140, 1: 417, -1: 381}
+[Label] Using EntrySignal as ML Label (Group-1 aligned).
+
+Backtesting (EntrySignal)...
+
+===== EntrySignal Backtest =====
+Start               : 2014-12-31 18:00:00
+End                 : 2024-12-20 14:00:00
+# Trades            : 547
+Win Rate [%]        : 71.29798903107861
+Return [%]          : 796.7495480502023
+Max. Drawdown [%]   : -9.810230289467746
+Profit Factor       : 3.404030444617669
+Sharpe Ratio        : 2.584480283274535
+Avg. Trade [%]      : 0.4026325875792436
+Best Trade [%]      : 4.592760681667707
+Worst Trade [%]     : -5.604840732823342
+Saved: D:\Time\datasets\group1_entrysignal_label.csv
+
+=== Step 3: VISUALIZE ===
+Shift signals forward by delay=2 bars.
+Signals After Propagation (PLOT ONLY): {1: 31429, -1: 30490, 0: 19}
+
+=== Step 4: FEATURES ===
+Extracting features...
+Please wait working with extract_buy_sell_hold_features...
+################################################################################
+Please wait working with add_price_window_features...
+################################################################################
+Features shape: (61938, 147)
+
+=== Step 5: SELECT ===
+Performing feature selection...
+D:\Time\env11\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+  warnings.warn(
+D:\Time\env11\Lib\site-packages\sklearn\linear_model\_logistic.py:1160: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+D:\Time\env11\Lib\site-packages\sklearn\linear_model\_logistic.py:1184: FutureWarning: 'n_jobs' has no effect since 1.8 and will be removed in 1.10. You provided 'n_jobs=-1', please leave it unspecified.
+  warnings.warn(msg, category=FutureWarning)
+Selected Features: [np.str_('ma_alignment'), np.str_('macd'), np.str_('macd_signal'), np.str_('hh'), np.str_('ll'), np.str_('pivot_high'), np.str_('pivot_low'), np.str_('dir'), np.str_('open_slope_10'), np.str_('high_std_3'), np.str_('high_slope_3'), np.str_('high_slope_10'), np.str_('high_slope_20'), np.str_('low_slope_3'), np.str_('low_std_5'), np.str_('low_slope_10'), np.str_('low_slope_20'), np.str_('close_slope_3'), np.str_('volume_slope_3')]
+
+=== Step 6: TRAIN ===
+Preparing dataset for model training...
+
+[Downsample] trades=798, holds_kept=1596 (ratio=2x)
+
+Label distribution (mapped, after downsample):
+0    1596
+2     417
+1     381
+Name: count, dtype: int64
+0    0.666667
+2    0.174185
+1    0.159148
+Name: proportion, dtype: float64
+
+=== Classical ML Models (weighted + macro + entry-only metrics) ===
+Class weights used: {np.int64(0): 0.49947835159102766, np.int64(2): 1.9111776447105788, np.int64(1): 2.106710671067107}
+
+==== RandomForest Classification Report (ALL) ====
+              precision    recall  f1-score   support
+
+           0       0.95      0.94      0.95       318
+           1       0.89      0.91      0.90        78
+           2       0.89      0.90      0.90        83
+
+    accuracy                           0.93       479
+   macro avg       0.91      0.92      0.91       479
+weighted avg       0.93      0.93      0.93       479
+
+Accuracy (all bars): 0.9311
+Macro F1 (all): 0.9149 | Weighted F1 (all): 0.9313
+
+---- Entry-only metrics (BUY/SELL only, HOLD excluded) ----
+Entry-only accuracy: 0.9068
+Entry-only Macro F1: 0.6341
+Entry-only Precision (macro): 0.6667
+Entry-only Recall (macro): 0.6046
+Pred distribution: {0: 315, 1: 80, 2: 84}
+
+==== LogisticRegression Classification Report (ALL) ====
+              precision    recall  f1-score   support
+
+           0       1.00      0.82      0.90       318
+           1       0.72      0.99      0.83        78
+           2       0.75      1.00      0.86        83
+
+    accuracy                           0.88       479
+   macro avg       0.82      0.94      0.86       479
+weighted avg       0.91      0.88      0.88       479
+
+Accuracy (all bars): 0.8789
+Macro F1 (all): 0.8642 | Weighted F1 (all): 0.8821
+
+---- Entry-only metrics (BUY/SELL only, HOLD excluded) ----
+Entry-only accuracy: 0.9938
+Entry-only Macro F1: 0.6645
+Entry-only Precision (macro): 0.6667
+Entry-only Recall (macro): 0.6624
+Pred distribution: {0: 262, 1: 107, 2: 110}
+
+==== SVM Classification Report (ALL) ====
+              precision    recall  f1-score   support
+
+           0       1.00      0.74      0.85       318
+           1       0.64      1.00      0.78        78
+           2       0.68      1.00      0.81        83
+
+    accuracy                           0.83       479
+   macro avg       0.77      0.91      0.81       479
+weighted avg       0.89      0.83      0.83       479
+
+Accuracy (all bars): 0.8267
+Macro F1 (all): 0.8132 | Weighted F1 (all): 0.8316
+
+---- Entry-only metrics (BUY/SELL only, HOLD excluded) ----
+Entry-only accuracy: 1.0000
+Entry-only Macro F1: 1.0000
+Entry-only Precision (macro): 1.0000
+Entry-only Recall (macro): 1.0000
+Pred distribution: {0: 235, 1: 122, 2: 122}
+
+==== XGBoost Classification Report (ALL) ====
+              precision    recall  f1-score   support
+
+           0       0.99      0.91      0.95       318
+           1       0.84      0.96      0.90        78
+           2       0.86      1.00      0.92        83
+
+    accuracy                           0.94       479
+   macro avg       0.90      0.96      0.92       479
+weighted avg       0.94      0.94      0.94       479
+
+Accuracy (all bars): 0.9353
+Macro F1 (all): 0.9232 | Weighted F1 (all): 0.9363
+
+---- Entry-only metrics (BUY/SELL only, HOLD excluded) ----
+Entry-only accuracy: 0.9814
+Entry-only Macro F1: 0.6601
+Entry-only Precision (macro): 0.6667
+Entry-only Recall (macro): 0.6538
+Pred distribution: {0: 293, 1: 89, 2: 97}
+RandomForest {'Accuracy_all': 0.9311064718162839, 'F1_macro': 0.9149350228692533, 'F1_weighted': 0.9312608872113672, 'Precision_macro': 0.9109126984126984, 'Recall_macro': 0.9190890315009433, 'Entry_only_accuracy': 0.906832298136646, 'Entry_only_F1_macro': 0.6341290742785942, 'Entry_only_Precision_macro': 0.6666666666666666, 'Entry_only_Recall_macro': 0.6046236226959119}
+LogisticRegression {'Accuracy_all': 0.8789144050104384, 'F1_macro': 0.8641786864584793, 'F1_weighted': 0.8820841978413344, 'Precision_macro': 0.8234516096255412, 'Recall_macro': 0.9359780680535398, 'Entry_only_accuracy': 0.9937888198757764, 'Entry_only_F1_macro': 0.6645161290322581, 'Entry_only_Precision_macro': 0.6666666666666666, 'Entry_only_Recall_macro': 0.6623931623931624}
+SVM {'Accuracy_all': 0.826722338204593, 'F1_macro': 0.8132218938825918, 'F1_weighted': 0.8315678576976266, 'Precision_macro': 0.773224043715847, 'Recall_macro': 0.9129979035639413, 'Entry_only_accuracy': 1.0, 'Entry_only_F1_macro': 1.0, 'Entry_only_Precision_macro': 1.0, 'Entry_only_Recall_macro': 1.0}
+XGBoost {'Accuracy_all': 0.9352818371607515, 'F1_macro': 0.9232297724971952, 'F1_weighted': 0.9362632953333044, 'Precision_macro': 0.8960426081521456, 'Recall_macro': 0.9578293823576843, 'Entry_only_accuracy': 0.9813664596273292, 'Entry_only_F1_macro': 0.6601307189542484, 'Entry_only_Precision_macro': 0.6666666666666666, 'Entry_only_Recall_macro': 0.6538461538461539}
+
+=== Deep Learning Models ===
+[INFO] TensorFlow models skipped unless you install tensorflow.
+
+=== Step 7: TEST ===
+Loading external test dataset...
+#
+Please wait working with add_price_window_features...
+################################################################################
+Low-volatility threshold ATR percentile=20% => 0.001445
+After ATR filter: {0: 70258, 1: 458, -1: 399}
+
+Unknown dataset prediction distribution:
+Signal
+ 0    70258
+ 1      458
+-1      399
+Name: count, dtype: int64
+D:\Time\modules\simulator.py:71: UserWarning: Data index is not datetime. Assuming simple periods, but `pd.DateTimeIndex` is advised.
+  bt = Backtest(
+
+===== Predicted Signal Backtest (Unknown Dataset) =====
+Start               : 0.0
+End                 : 71114.0
+# Trades            : 430.0
+Win Rate [%]        : 42.7906976744186
+Return [%]          : -68.60428165040007
+Max. Drawdown [%]   : -70.06347828885191
+Profit Factor       : 0.5944070704169405
+Sharpe Ratio        : nan
+Avg. Trade [%]      : -0.2696448078190583
+Best Trade [%]      : 5.728779421960457
+Worst Trade [%]     : -5.5527914543652885
